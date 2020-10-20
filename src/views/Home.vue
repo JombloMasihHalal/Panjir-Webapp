@@ -64,7 +64,7 @@ export default {
 
       // Configure series
       var polygonTemplate = polygonSeries.mapPolygons.template;
-      polygonTemplate.tooltipText = "{name}";
+      polygonTemplate.tooltipText = "{RW}, Kel. {KEL_NAME}, Kec. {KEC_NAME}, {KAB_NAME}";
       polygonTemplate.polygon.fillOpacity = 0.6;
 
       // Create hover state and set alternative fill color
