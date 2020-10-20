@@ -5,6 +5,7 @@
 <script>
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
+import jakartaJSON from '@/data/jakarta.json';
 
 export default {
   name: "Home",
@@ -27,6 +28,7 @@ export default {
     }
   },
   mounted() {
+    console.log('jakarta', jakartaJSON.features[0]);
     const {
       am4core,
       am4themes_animated,
@@ -34,6 +36,7 @@ export default {
       // am4geodata_worldLow,
       am4geodata_indonesiaLow
     } = window;
+    console.log('indonesia', am4geodata_indonesiaLow.features[0]);
 
     am4core.ready(() => {
       // Themes begin
@@ -45,7 +48,7 @@ export default {
 
       // Set map definition
       // chart.geodata = am4geodata_worldLow;
-      chart.geodata = am4geodata_indonesiaLow;
+      chart.geodata = jakartaJSON;
 
       // Set projection
       chart.projection = new am4maps.projections.Miller();
