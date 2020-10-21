@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="content">
-      <!-- <TweetItem 
+      <TweetItem 
         v-for="(tweet, index) in tweets" 
         :key="index" 
         :confidence="tweet.confidence"
@@ -22,23 +22,45 @@
         :content="tweet.content"
         :location="tweet.location"
         :tweet-url="tweet.tweet_url"
-        /> -->
+        />
     </div>
   </div>
 </template>
 
 <script>
-// import TweetItem from './TweetItem';
+import TweetItem from './TweetItem';
 
 export default {
   name: "TweetList",
   components: {
-    // TweetItem
+    TweetItem
   },
   data() {
     return {
       filter: 'relevant',
       tweets: [
+        {
+          confidence: 10,
+          img:
+            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhurd.house.gov%2Fsites%2Fhurd.house.gov%2Ffiles%2Ffeatured_image%2FBreakingNews.jpeg&f=1&nofb=1",
+          username: "RelevanNews",
+          name: "Relevan News",
+          content:
+            "Banjir setinggi 2 meter terjadi di daerah sekitar GOR Jakarta Timur",
+          location: "GOR Jakarta Timur",
+          tweet_url: "#"
+        },
+        {
+          confidence: 10,
+          img:
+            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhurd.house.gov%2Fsites%2Fhurd.house.gov%2Ffiles%2Ffeatured_image%2FBreakingNews.jpeg&f=1&nofb=1",
+          username: "RelevanNews",
+          name: "Relevan News",
+          content:
+            "Banjir setinggi 2 meter terjadi di daerah sekitar GOR Jakarta Timur",
+          location: "GOR Jakarta Timur",
+          tweet_url: "#"
+        },
         {
           confidence: 10,
           img:
@@ -93,8 +115,12 @@ export default {
   transform: translateY(-50%);
   padding: 1rem;
   border-radius: .5rem;
-  min-width: 20rem;
+  width: 25rem;
   z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 
   .title {
     width: 100%;
@@ -108,6 +134,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
     &__item {
       width: 45%;
       text-align: center;
@@ -119,6 +146,13 @@ export default {
         border-radius: .25rem;
       }
     }
+  }
+
+  .content {
+    height: 50%;
+    flex-grow: 1;
+    overflow: auto;
+    margin-top: 1rem;
   }
 }
 </style>

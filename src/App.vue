@@ -34,4 +34,28 @@
     }
   }
 }
+/* width */
+::-webkit-scrollbar {
+  width: 0.5vw;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(grey, .15);
+  border-radius: 0.5vw;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(grey, .3);
+  border-radius: 0.5vw;
+  cursor: pointer;
+  // background: url("../../img/CODMID_wester_preanniv_popup_scrollbar.png");
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  filter: grayscale(10);
+}
+
 </style>

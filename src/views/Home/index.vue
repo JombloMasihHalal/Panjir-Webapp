@@ -163,6 +163,7 @@ export default {
 
   &__logo {
     position: fixed;
+    z-index: 10;
     left: 2rem;
     top: 2rem;
     text-align: left;
