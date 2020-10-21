@@ -2,10 +2,11 @@
   <div class="home">
     <div class="home__logo">
       <div class="title">Panjir</div>
-      <div class="subtitlte">Pantau Banjir</div>
+      <div class="subtitle">Pantau Banjir</div>
     </div>
     <TweetList/>
     <div id="chartdiv">
+
     </div>
   </div>
 </template>
@@ -155,5 +156,28 @@ export default {
   width: 100vw;
   height: 100vh;
   position: fixed;
+}
+
+.home {
+  position: relative;
+
+  &__logo {
+    position: absolute;
+    left: 2rem;
+    top: 2rem;
+    text-align: left;
+
+    .title {
+      font-weight: bold;
+      font-size: 2.5rem;
+      text-transform: uppercase;
+      color: #fc6A6a;
+    }
+    .subtitle {
+      font-size: 1.6rem;
+      letter-spacing: .25rem;
+      color: #775353;
+    }
+  }
 }
 </style>
