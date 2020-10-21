@@ -4,10 +4,8 @@
       <div class="title">Panjir</div>
       <div class="subtitle">Pantau Banjir</div>
     </div>
-    <TweetList/>
-    <div id="chartdiv">
-
-    </div>
+    <TweetList />
+    <div id="chartdiv"></div>
   </div>
 </template>
 
@@ -41,7 +39,7 @@ export default {
       ]
     };
   },
-  mounted() {
+  async mounted() {
     console.log(
       "jakarta",
       jakartaJSON.features[0].geometry.coordinates[0][0].map(([lat, long]) => [
@@ -58,7 +56,6 @@ export default {
       //   ...jakartaJSON,
       //   geometry: jakartaJSON.
       // };
-      
       // download(JSON.stringify(data), 'test', 'json');
     },
     setupMap() {
@@ -172,11 +169,11 @@ export default {
       font-weight: bold;
       font-size: 2.5rem;
       text-transform: uppercase;
-      color: #fc6A6a;
+      color: #fc6a6a;
     }
     .subtitle {
       font-size: 1.6rem;
-      letter-spacing: .25rem;
+      letter-spacing: 0.25rem;
       color: #775353;
     }
   }
