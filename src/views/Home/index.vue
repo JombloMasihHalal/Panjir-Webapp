@@ -162,7 +162,7 @@ export default {
   position: relative;
 
   &__logo {
-    position: absolute;
+    position: fixed;
     left: 2rem;
     top: 2rem;
     text-align: left;

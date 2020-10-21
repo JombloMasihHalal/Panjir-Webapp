@@ -4,39 +4,40 @@
       Daftar Tweet
     </div>
     <div class="tab">
-      <div class="tab__item">
+      <div :class="['tab__item', filter === 'relevant'? 'active': '']" @click="changeFilter('relevant')">
         Paling Relevan
       </div>
-      <div class="tab__item">
+      <div :class="['tab__item', filter === 'newest'? 'active': '']" @click="changeFilter('newest')">
         Terbaru
       </div>
     </div>
     <div class="content">
-      <TweetItem 
+      <!-- <TweetItem 
         v-for="(tweet, index) in tweets" 
         :key="index" 
         :confidence="tweet.confidence"
         :name="tweet.name"
         :username="tweet.username"
-        :profile="tweet.img"
+        :profileImg="tweet.img"
         :content="tweet.content"
         :location="tweet.location"
         :tweet-url="tweet.tweet_url"
-        />
+        /> -->
     </div>
   </div>
 </template>
 
 <script>
-import TweetItem from './TweetItem';
+// import TweetItem from './TweetItem';
 
 export default {
   name: "TweetList",
   components: {
-    TweetItem
+    // TweetItem
   },
   data() {
     return {
+      filter: 'relevant',
       tweets: [
         {
           confidence: 10,
@@ -73,8 +74,51 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    changeFilter(val) {
+      this.filter = val;
+    }
   }
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.tweet-list {
+  position: fixed;
+  box-shadow: 0 0 5px 5px rgba(black, .15);
+  top: 50%;
+  right: 2rem;
+  height: 90vh;
+  transform: translateY(-50%);
+  padding: 1rem;
+  border-radius: .5rem;
+  min-width: 20rem;
+  z-index: 10;
+
+  .title {
+    width: 100%;
+    text-align: left;
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .tab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &__item {
+      width: 45%;
+      text-align: center;
+      padding: .5rem;
+      transition: all .2s;
+      cursor: pointer;
+      &.active {
+        background: rgba(grey, .3);
+        border-radius: .25rem;
+      }
+    }
+  }
+}
+</style>

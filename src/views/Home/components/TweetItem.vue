@@ -1,7 +1,7 @@
 <template>
   <div class="tweet-item">
     <div class="confidence">
-      {confidence}
+      {{ confidence }}
     </div>
     <div class="content">
       <div class="user-info">
@@ -10,17 +10,19 @@
         </figure>
         <div class="user-info__content">
           <div class="name">
-            {name}
+            {{ name }}
           </div>
           <div class="username">
-            {username}
+            {{ username }}
           </div>
         </div>
       </div>
       <div class="text">
-        {content}
+        {{ content }}
       </div>
-      <div class="location"><img src="#" alt="" class="icon" /> {location}</div>
+      <div class="location">
+        <img src="#" alt="" class="icon" />{{ location }}
+      </div>
     </div>
   </div>
 </template>
