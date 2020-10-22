@@ -40,15 +40,15 @@ export default {
     };
   },
   async mounted() {
-    console.log(
-      "jakarta",
-      jakartaJSON.features[0].geometry.coordinates[0][0].map(([lat, long]) => [
-        lat * 256,
-        long * 256
-      ])
-    );
+    // console.log(
+    //   "jakarta",
+    //   jakartaJSON.features[0].geometry.coordinates[0][0].map(([lat, long]) => [
+    //     lat * 256,
+    //     long * 256
+    //   ])
+    // );
     this.compressJSONdownload();
-    // this.setupMap();
+    this.setupMap();
   },
   methods: {
     compressJSONdownload() {
