@@ -1,14 +1,19 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-    </div>
+    </div> -->
     <router-view />
   </div>
 </template>
 
 <style lang="scss">
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -29,4 +34,28 @@
     }
   }
 }
+/* width */
+::-webkit-scrollbar {
+  width: 0.5vw;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(grey, .15);
+  border-radius: 0.5vw;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(grey, .3);
+  border-radius: 0.5vw;
+  cursor: pointer;
+  // background: url("../../img/CODMID_wester_preanniv_popup_scrollbar.png");
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  filter: grayscale(10);
+}
+
 </style>
