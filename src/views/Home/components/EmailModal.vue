@@ -20,7 +20,7 @@
           Masukkan nomor anda untuk mendapatkan pemberitahuan banjir Jakarta
           secara aktual
         </p>
-        <the-mask v-model="phone" :mask="['(##) ###-####-####']" />
+        <the-mask v-model="phone" :mask="['(##) ###-####-####']" placeholder="(62) 812-3456-7890"/>
         <button @click="sendPhoneNumber">Subscribe!</button>
       </template>
 
@@ -45,7 +45,7 @@ export default {
   },
   data() {
     return {
-      minimize: false,
+      minimize: true,
       phone: "",
       sended: false,
     };
