@@ -11,3 +11,10 @@ export const getTweetList = async options => {
     params: options
   });
 };
+
+export const createPhoneNumber = async data => {
+  return await request.post("usersSubscriber/addPhoneNumber", {
+    phoneNumber: data
+  });
+};
+

@@ -12,12 +12,18 @@
       </div>
     </div>
     <div class="content">
-      <p>
-        Masukkan nomor anda untuk mendapatkan pemberitahuan banjir Jakarta
-        secara aktual
+      <p v-if="sended && minimize">
+        Nomor anda telah terdaftar
       </p>
-      <the-mask :mask="['(##) ###-####-####']" />
-      <button @click="toggleMinimize">Subscribe!</button>
+      <template v-else-if="minimize">
+        <p>
+          Masukkan nomor anda untuk mendapatkan pemberitahuan banjir Jakarta
+          secara aktual
+        </p>
+        <the-mask v-model="phone" :mask="['(##) ###-####-####']" />
+        <button @click="sendPhoneNumber">Subscribe!</button>
+      </template>
+
     </div>
     <img
       src="@/assets/img/close-24px.svg"
@@ -30,6 +36,7 @@
 
 <script>
 import { TheMask } from "vue-the-mask";
+import { createPhoneNumber } from "@/api/tweet.js";
 
 export default {
   name: "EmailModal",
@@ -38,12 +45,27 @@ export default {
   },
   data() {
     return {
-      minimize: false
+      minimize: false,
+      phone: "",
+      sended: false,
     };
+  },
+  watch: {
+    minimize(val) {
+      if(!val) this.sended = false;
+    }
   },
   methods: {
     toggleMinimize() {
       this.minimize = !this.minimize;
+    },
+    async sendPhoneNumber() {
+      await createPhoneNumber(this.phone);
+      this.sended = true;
+      const self = this;
+      setTimeout(()=>{
+        self.minimize = false;
+      }, 5000)
     }
   }
 };
@@ -64,7 +86,7 @@ export default {
   &.hide {
     max-width: 3rem;
     .header {
-      padding: .25rem;
+      padding: 0.25rem;
       display: block;
       &-name {
         display: none;
