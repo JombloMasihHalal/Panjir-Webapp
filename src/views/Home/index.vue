@@ -4,7 +4,7 @@
       <div class="title">Panjir</div>
       <div class="subtitle">Pantau Banjir</div>
     </div>
-    <TweetList />
+    <TweetList :list="tweetList.data" :loading="tweetList.loading"/>
     <div id="chartdiv"></div>
   </div>
 </template>
@@ -14,6 +14,7 @@
 // import HelloWorld from "@/components/HelloWorld.vue";
 import TweetList from "./components/TweetList";
 import jakartaJSON from "@/data/jakarta.json";
+import { getMapData, getTweetList } from "@/api/tweet";
 // import { download } from "@/helper";
 
 export default {
@@ -23,20 +24,11 @@ export default {
   },
   data() {
     return {
-      floodData: [
-        {
-          title: "Cimahi",
-          latitude: -6.87222,
-          longitude: 107.5425
-        },
-        {
-          title: "Duren Sawit",
-          latitude: -6.229541,
-          longitude: 106.918153,
-          tweetNum: 10,
-          confidence: 10
-        }
-      ]
+      floodData: [],
+      tweetList: {
+        data: [],
+        loading: false
+      }
     };
   },
   async mounted() {
@@ -47,10 +39,37 @@ export default {
     //     long * 256
     //   ])
     // );
-    this.compressJSONdownload();
-    this.setupMap();
+    this.tweetList.loading = true;
+    await this.fetchMapData();
+    await this.fetchTweetList();
+    // this.compressJSONdownload();
+    // this.setupMap();
   },
   methods: {
+    async fetchMapData() {
+      const startDate = new Date("01/01/2019").toISOString();
+      const endDate = new Date().toISOString();
+      this.floodData = await getMapData({
+        since: startDate,
+        until: endDate
+      }).then(response => response.data.data.map((item)=>({
+        ...item,
+        latitude: parseFloat(item.latitude),
+        longitude: parseFloat(item.longitude)
+      })))
+    },
+    async fetchTweetList() {
+      const startDate = new Date("01/01/2019").toISOString();
+      const endDate = new Date().toISOString();
+      this.tweetList.data = await getTweetList({
+        since: startDate,
+        until: endDate,
+        latitude: -6.2079995,
+        longitude: 106.89084847872
+      }).then(response => response.data.data)
+      this.tweetList.loading = false;
+      console.log("fetchTweetList -> this.tweetList", this.tweetList)
+    },
     compressJSONdownload() {
       // const data = {
       //   ...jakartaJSON,
