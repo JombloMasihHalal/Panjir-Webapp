@@ -124,14 +124,21 @@ export default {
         var imageSeries = chart.series.push(new am4maps.MapImageSeries());
         imageSeries.mapImages.template.propertyFields.longitude = "longitude";
         imageSeries.mapImages.template.propertyFields.latitude = "latitude";
-        imageSeries.mapImages.template.tooltipText = "{title}";
         imageSeries.mapImages.template.propertyFields.url = "url";
+        imageSeries.mapImages.template.tooltip = new am4core.Tooltip();
+        imageSeries.mapImages.template.tooltip.getFillFromObject = false;
+        imageSeries.mapImages.template.tooltip.label.fontSize = 20;
+        imageSeries.mapImages.template.tooltip.color = am4core.color("#000");
+        imageSeries.mapImages.template.tooltip.label.propertyFields.fill = "color";
+        imageSeries.mapImages.template.tooltip.background.propertyFields.stroke = "color";
+        imageSeries.mapImages.template.tooltipText = "{title}\n [font-size:10px]Tweet: {tweetNum}\nConfidence: {confidence}";
+        // imageSeries.mapImages.template.tooltip.borderRadius = 1;
 
         var circle = imageSeries.mapImages.template.createChild(am4core.Circle);
         circle.radius = 3;
         circle.propertyFields.fill = "color";
         circle.propertyFields.zIndex = 4;
-        circle.events.on("hit", handleDotClicked);
+        // circle.events.on("hit", handleDotClicked);
 
         var circle2 = imageSeries.mapImages.template.createChild(
           am4core.Circle
@@ -139,6 +146,7 @@ export default {
         circle2.radius = 3;
         circle2.propertyFields.zIndex = 2;
         circle2.propertyFields.fill = "color";
+        circle2.events.on("hit", handleDotClicked);
 
         circle2.events.on("inited", function(event) {
           animateBullet(event.target);
