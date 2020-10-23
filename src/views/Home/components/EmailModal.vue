@@ -1,5 +1,5 @@
 <template>
-  <div :class="['email-modal', minimize ? '' : 'hide']">
+  <div :class="['email-modal', minimize ? 'hide' : '']">
     <div class="header">
       <img
         src="@/assets/img/notifications-24px.svg"
@@ -12,10 +12,10 @@
       </div>
     </div>
     <div class="content">
-      <p v-if="sended && minimize">
+      <p v-if="sended && !minimize">
         Nomor anda telah terdaftar
       </p>
-      <template v-else-if="minimize">
+      <template v-else-if="!minimize">
         <p>
           Masukkan nomor anda untuk mendapatkan pemberitahuan banjir Jakarta
           secara aktual
@@ -64,7 +64,7 @@ export default {
       this.sended = true;
       const self = this;
       setTimeout(()=>{
-        self.minimize = false;
+        self.minimize = true;
       }, 5000)
     }
   }
