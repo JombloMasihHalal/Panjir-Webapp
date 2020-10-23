@@ -4,7 +4,12 @@
       <div class="title">Panjir</div>
       <div class="subtitle">Pantau Banjir</div>
     </div>
-    <TweetList :list="tweetList.data" :loading="tweetList.loading" />
+    <TweetList
+      :list="tweetList.data"
+      :loading="tweetList.loading"
+      :filter="filter"
+      @changeFilter="changeFilter"
+    />
     <div id="chartdiv"></div>
   </div>
 </template>
@@ -29,7 +34,8 @@ export default {
         data: [],
         loading: false
       },
-      selectedPoint: false
+      selectedPoint: false,
+      filter: "relevant"
     };
   },
   computed: {
@@ -48,23 +54,22 @@ export default {
     selectedLocation() {
       this.tweetList.loading = true;
       this.fetchTweetList();
+    },
+    filter() {
+      this.tweetList.loading = true;
+      this.fetchTweetList();
     }
   },
   async mounted() {
-    // console.log(
-    //   "jakarta",
-    //   jakartaJSON.features[0].geometry.coordinates[0][0].map(([lat, long]) => [
-    //     lat * 256,
-    //     long * 256
-    //   ])
-    // );
     this.tweetList.loading = true;
     await this.fetchMapData();
     await this.fetchTweetList();
-    // this.compressJSONdownload();
     this.setupMap();
   },
   methods: {
+    changeFilter(value) {
+      this.filter = value;
+    },
     async fetchMapData() {
       const startDate = new Date("01/01/2019").toISOString();
       const endDate = new Date().toISOString();
@@ -84,13 +89,16 @@ export default {
       const endDate = new Date().toISOString();
       const options = {
         since: startDate,
-        until: endDate
-      }
+        until: endDate,
+        sortByConfidence: this.filter === 'relevant' ? 1 : 0
+      };
       if (this.selectedLocation) {
         options.latitude = this.selectedLocation.latitude;
         options.longitude = this.selectedLocation.longitude;
       }
-      this.tweetList.data = await getTweetList(options).then(response => response.data.data);
+      this.tweetList.data = await getTweetList(options).then(
+        response => response.data.data
+      );
       this.tweetList.loading = false;
     },
     setupMap() {
@@ -171,10 +179,9 @@ export default {
           animateBullet(event.target);
         });
 
-        function handleDotClicked(event){
-          console.log("handleDotClicked -> event", event)
+        function handleDotClicked(event) {
           self.selectPoint(event.target.dataItem._point);
-        };
+        }
 
         function animateBullet(circle) {
           var animation = circle.animate(
