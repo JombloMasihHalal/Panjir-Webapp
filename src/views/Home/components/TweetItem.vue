@@ -1,5 +1,5 @@
 <template>
-  <div class="tweet-item">
+  <div class="tweet-item" @click="toTweetSource">
     <div class="confidence">
       {{ confidence }}
     </div>
@@ -12,16 +12,16 @@
           <div class="name">
             {{ name }}
           </div>
-          <div class="username">
-            @{{ username }}
-          </div>
+          <div class="username">@{{ username }}</div>
         </div>
       </div>
       <div class="text">
         {{ content }}
       </div>
       <div class="location">
-        <img src="@/assets/img/location_on-24px.svg" alt="" class="icon" />{{ location }}
+        <img src="@/assets/img/location_on-24px.svg" alt="" class="icon" />{{
+          location
+        }}
       </div>
     </div>
   </div>
@@ -38,8 +38,14 @@ export default {
     "content",
     "profileImg",
     "location",
-    "tweetURl"
-  ]
+    "tweetUrl"
+  ],
+  methods: {
+    toTweetSource() {
+      var win = window.open(this.tweetUrl, "_blank");
+      win.focus();
+    }
+  }
 };
 </script>
 
@@ -48,23 +54,28 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: .5rem;
-  border: 1px solid rgba(black, .15);
-  border-radius: .5rem;
-    text-align: left;
+  padding: 0.5rem;
+  border: 1px solid rgba(black, 0.15);
+  border-radius: 0.5rem;
+  text-align: left;
+  cursor: pointer;
 
-    &:not(:first-child) {
-  margin-top: 1rem;
-
-    }
+  &:not(:first-child) {
+    margin-top: 1rem;
+  }
 
   .confidence {
     font-size: 4rem;
     font-weight: bold;
-    margin-right: .5rem;
+    margin-right: 0.5rem;
+    width: 5rem;
+    display: grid;
+    place-content: center;
   }
 
   .content {
+    flex-basis: 10%;
+    flex-grow: 1;
     .text {
       font-size: 1rem;
       margin-bottom: 1rem;
@@ -75,7 +86,7 @@ export default {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    font-size: .8rem;
+    font-size: 0.8rem;
     color: #6a97fc;
     .icon {
       height: 1rem;
@@ -86,15 +97,15 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 
   &__profile {
     height: 3rem;
     width: 3rem;
     border-radius: 50%;
     overflow: hidden;
-    margin-right: .5rem;
-    background: rgba(grey, .15);
+    margin-right: 0.5rem;
+    background: rgba(grey, 0.15);
     img {
       height: 100%;
       width: 100%;
@@ -108,7 +119,7 @@ export default {
     }
     .username {
       font-weight: bold;
-      color: rgba(black, .5)
+      color: rgba(black, 0.5);
     }
   }
 }

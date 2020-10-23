@@ -15,6 +15,7 @@
       <loading :active.sync="loading" 
         :can-cancel="false" 
         :is-full-page="false"></loading>
+      <div v-if="!loading && list.length === 0" class="empty">Tidak ada tweet yang terkait</div>
       <TweetItem 
         v-for="(tweet, index) in list" 
         :key="index" 

@@ -13,7 +13,7 @@
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
 import TweetList from "./components/TweetList";
-import jakartaJSON from "@/data/jakarta.json";
+import jakartaJSON from "@/data/jakarta-kecamatan.json";
 import { getMapData, getTweetList } from "@/api/tweet";
 // import { download } from "@/helper";
 
@@ -28,7 +28,8 @@ export default {
       tweetList: {
         data: [],
         loading: false
-      }
+      },
+      chosenLocation: false
     };
   },
   async mounted() {
@@ -43,7 +44,7 @@ export default {
     await this.fetchMapData();
     await this.fetchTweetList();
     // this.compressJSONdownload();
-    // this.setupMap();
+    this.setupMap();
   },
   methods: {
     async fetchMapData() {
@@ -113,9 +114,8 @@ export default {
         // Configure series
         var polygonTemplate = polygonSeries.mapPolygons.template;
         polygonTemplate.tooltipText =
-          "{RW}, Kel. {KEL_NAME}, Kec. {KEC_NAME}, {KAB_NAME}";
+          "Kel. {KEL_NAME}, Kec. {Kecamatan}";
         polygonTemplate.polygon.fillOpacity = 0.6;
-
         // Create hover state and set alternative fill color
         var hs = polygonTemplate.states.create("hover");
         hs.properties.fill = chart.colors.getIndex(0);
@@ -130,16 +130,23 @@ export default {
         var circle = imageSeries.mapImages.template.createChild(am4core.Circle);
         circle.radius = 3;
         circle.propertyFields.fill = "color";
+        circle.propertyFields.zIndex = 4;
+        circle.events.on("hit", handleDotClicked);
 
         var circle2 = imageSeries.mapImages.template.createChild(
           am4core.Circle
         );
         circle2.radius = 3;
+        circle2.propertyFields.zIndex = 2;
         circle2.propertyFields.fill = "color";
 
         circle2.events.on("inited", function(event) {
           animateBullet(event.target);
         });
+
+        function handleDotClicked(event) {
+          console.log(event)
+        }
 
         function animateBullet(circle) {
           var animation = circle.animate(
@@ -162,7 +169,7 @@ export default {
           color: colorSet.next()
         }));
       }); // end am4core.ready()
-    }
+    },
   }
 };
 </script>
