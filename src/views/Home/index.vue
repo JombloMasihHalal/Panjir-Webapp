@@ -8,7 +8,9 @@
       :list="tweetList.data"
       :loading="tweetList.loading"
       :filter="filter"
+      :place="selectedLocation ? selectedLocation.title:''"
       @changeFilter="changeFilter"
+      @back="selectedPoint = false"
     />
     <div id="chartdiv"></div>
   </div>

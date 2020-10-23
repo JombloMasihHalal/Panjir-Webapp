@@ -1,7 +1,14 @@
 <template>
   <div class="tweet-list">
     <div class="title">
-      Daftar Tweet
+      <img
+        v-if="place"
+        class="back-btn"
+        src="@/assets/img/arrow_back-24px.svg"
+        alt=""
+        @click="$emit('back')"
+      />
+      {{ place ? place : "Daftar Tweet" }}
     </div>
     <div class="tab">
       <div
@@ -59,7 +66,8 @@ export default {
       default: () => []
     },
     loading: Boolean,
-    filter: String
+    filter: String,
+    place: String
   },
   methods: {
     changeFilter(val) {
@@ -98,6 +106,13 @@ export default {
     font-size: 1.6rem;
     font-weight: bold;
     margin-bottom: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .back-btn {
+      margin-right: 1rem;
+      cursor: pointer;
+    }
   }
 
   .tab {

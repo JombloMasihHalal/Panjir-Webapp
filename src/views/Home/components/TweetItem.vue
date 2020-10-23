@@ -73,7 +73,7 @@ export default {
   text-align: left;
   cursor: pointer;
 
-  &:not(:first-child) {
+  &:not(:nth-child(2)) {
     margin-top: 1rem;
   }
 
