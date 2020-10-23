@@ -12,6 +12,7 @@
       @changeFilter="changeFilter"
       @back="selectedPoint = false"
     />
+    <EmailModal />
     <div id="chartdiv"></div>
   </div>
 </template>
@@ -20,6 +21,7 @@
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
 import TweetList from "./components/TweetList";
+import EmailModal from "./components/EmailModal";
 import jakartaJSON from "@/data/jakarta-kecamatan.json";
 import { getMapData, getTweetList } from "@/api/tweet";
 // import { download } from "@/helper";
@@ -27,7 +29,8 @@ import { getMapData, getTweetList } from "@/api/tweet";
 export default {
   name: "Home",
   components: {
-    TweetList
+    TweetList,
+    EmailModal
   },
   data() {
     return {

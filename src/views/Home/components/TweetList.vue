@@ -1,5 +1,5 @@
 <template>
-  <div class="tweet-list">
+  <div :class="['tweet-list', minimize ? 'hide': '']">
     <div class="title">
       <img
         v-if="place"
@@ -46,6 +46,13 @@
         :tweet-url="tweet.tweet_url"
       />
     </div>
+    <div class="minimize" @click="toggleMinimize">
+      <img
+        src="@/assets/img/chevron_right-24px.svg"
+        alt=""
+        class="minimize__btn"
+      />
+    </div>
   </div>
 </template>
 
@@ -69,9 +76,17 @@ export default {
     filter: String,
     place: String
   },
+  data() {
+    return {
+      minimize: false,
+    }
+  },
   methods: {
     changeFilter(val) {
       this.$emit("changeFilter", val);
+    },
+    toggleMinimize() {
+      this.minimize = !this.minimize;
     }
   }
 };
@@ -94,7 +109,29 @@ export default {
   align-items: center;
   flex-direction: column;
   background: rgba(white, 0.5);
-  transition: all 0.2s;
+  transition: all 0.5s;
+
+  &.hide {
+    transform: translate(calc(100% + 2rem), -50%);
+
+    .minimize__btn {
+      transform: rotateZ(180deg);
+    }
+  }
+
+  .minimize {
+    position: absolute;
+    right: 100%;
+    background: white;
+    border-radius: .5rem 0 0 .5rem;
+    box-shadow: -3px 0 3px 3px rgba(black, 0.15);
+    cursor: pointer;
+
+    &__btn {
+      transition: all .5s;
+      width: 2rem;
+    }
+  }
 
   &:hover {
     background: white;
