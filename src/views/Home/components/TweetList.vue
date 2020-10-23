@@ -12,15 +12,19 @@
       </div>
     </div>
     <div class="content">
+      <loading :active.sync="loading" 
+        :can-cancel="false" 
+        :is-full-page="false"></loading>
+      <div v-if="!loading && list.length === 0" class="empty">Tidak ada tweet yang terkait</div>
       <TweetItem 
-        v-for="(tweet, index) in tweets" 
+        v-for="(tweet, index) in list" 
         :key="index" 
         :confidence="tweet.confidence"
         :name="tweet.name"
         :username="tweet.username"
         :profileImg="tweet.img"
         :content="tweet.content"
-        :location="tweet.location"
+        :location="tweet.locationInfo.parsed_place_name"
         :tweet-url="tweet.tweet_url"
         />
     </div>
@@ -29,72 +33,25 @@
 
 <script>
 import TweetItem from './TweetItem';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
   name: "TweetList",
   components: {
-    TweetItem
+    TweetItem,
+    Loading
+  },
+  props: {
+    list: {
+      type: Array,
+      default: ()=>[]
+    },
+    loading: Boolean
   },
   data() {
     return {
       filter: 'relevant',
-      tweets: [
-        {
-          confidence: 10,
-          img:
-            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhurd.house.gov%2Fsites%2Fhurd.house.gov%2Ffiles%2Ffeatured_image%2FBreakingNews.jpeg&f=1&nofb=1",
-          username: "RelevanNews",
-          name: "Relevan News",
-          content:
-            "Banjir setinggi 2 meter terjadi di daerah sekitar GOR Jakarta Timur",
-          location: "GOR Jakarta Timur",
-          tweet_url: "#"
-        },
-        {
-          confidence: 10,
-          img:
-            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhurd.house.gov%2Fsites%2Fhurd.house.gov%2Ffiles%2Ffeatured_image%2FBreakingNews.jpeg&f=1&nofb=1",
-          username: "RelevanNews",
-          name: "Relevan News",
-          content:
-            "Banjir setinggi 2 meter terjadi di daerah sekitar GOR Jakarta Timur",
-          location: "GOR Jakarta Timur",
-          tweet_url: "#"
-        },
-        {
-          confidence: 10,
-          img:
-            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhurd.house.gov%2Fsites%2Fhurd.house.gov%2Ffiles%2Ffeatured_image%2FBreakingNews.jpeg&f=1&nofb=1",
-          username: "RelevanNews",
-          name: "Relevan News",
-          content:
-            "Banjir setinggi 2 meter terjadi di daerah sekitar GOR Jakarta Timur",
-          location: "GOR Jakarta Timur",
-          tweet_url: "#"
-        },
-        {
-          confidence: 10,
-          img:
-            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhurd.house.gov%2Fsites%2Fhurd.house.gov%2Ffiles%2Ffeatured_image%2FBreakingNews.jpeg&f=1&nofb=1",
-          username: "RelevanNews",
-          name: "Relevan News",
-          content:
-            "Banjir setinggi 2 meter terjadi di daerah sekitar GOR Jakarta Timur",
-          location: "GOR Jakarta Timur",
-          tweet_url: "#"
-        },
-        {
-          confidence: 10,
-          img:
-            "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhurd.house.gov%2Fsites%2Fhurd.house.gov%2Ffiles%2Ffeatured_image%2FBreakingNews.jpeg&f=1&nofb=1",
-          username: "RelevanNews",
-          name: "Relevan News",
-          content:
-            "Banjir setinggi 2 meter terjadi di daerah sekitar GOR Jakarta Timur",
-          location: "GOR Jakarta Timur",
-          tweet_url: "#"
-        }
-      ]
     };
   },
   methods: {

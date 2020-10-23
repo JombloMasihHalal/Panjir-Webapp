@@ -4,7 +4,7 @@
       <div class="title">Panjir</div>
       <div class="subtitle">Pantau Banjir</div>
     </div>
-    <TweetList />
+    <TweetList :list="tweetList.data" :loading="tweetList.loading" />
     <div id="chartdiv"></div>
   </div>
 </template>
@@ -13,7 +13,8 @@
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
 import TweetList from "./components/TweetList";
-import jakartaJSON from "@/data/jakarta.json";
+import jakartaJSON from "@/data/jakarta-kecamatan.json";
+import { getMapData, getTweetList } from "@/api/tweet";
 // import { download } from "@/helper";
 
 export default {
@@ -23,21 +24,31 @@ export default {
   },
   data() {
     return {
-      floodData: [
-        {
-          title: "Cimahi",
-          latitude: -6.87222,
-          longitude: 107.5425
-        },
-        {
-          title: "Duren Sawit",
-          latitude: -6.229541,
-          longitude: 106.918153,
-          tweetNum: 10,
-          confidence: 10
-        }
-      ]
+      floodData: [],
+      tweetList: {
+        data: [],
+        loading: false
+      },
+      selectedPoint: false
     };
+  },
+  computed: {
+    selectedLocation() {
+      return (
+        this.selectedPoint &&
+        this.floodData.find(
+          item =>
+            item.longitude === this.selectedPoint[0] &&
+            item.latitude === this.selectedPoint[1]
+        )
+      );
+    }
+  },
+  watch: {
+    selectedLocation() {
+      this.tweetList.loading = true;
+      this.fetchTweetList();
+    }
   },
   async mounted() {
     // console.log(
@@ -47,16 +58,40 @@ export default {
     //     long * 256
     //   ])
     // );
-    this.compressJSONdownload();
+    this.tweetList.loading = true;
+    await this.fetchMapData();
+    await this.fetchTweetList();
+    // this.compressJSONdownload();
     this.setupMap();
   },
   methods: {
-    compressJSONdownload() {
-      // const data = {
-      //   ...jakartaJSON,
-      //   geometry: jakartaJSON.
-      // };
-      // download(JSON.stringify(data), 'test', 'json');
+    async fetchMapData() {
+      const startDate = new Date("01/01/2019").toISOString();
+      const endDate = new Date().toISOString();
+      this.floodData = await getMapData({
+        since: startDate,
+        until: endDate
+      }).then(response =>
+        response.data.data.map(item => ({
+          ...item,
+          latitude: parseFloat(item.latitude),
+          longitude: parseFloat(item.longitude)
+        }))
+      );
+    },
+    async fetchTweetList() {
+      const startDate = new Date("01/01/2019").toISOString();
+      const endDate = new Date().toISOString();
+      const options = {
+        since: startDate,
+        until: endDate
+      }
+      if (this.selectedLocation) {
+        options.latitude = this.selectedLocation.latitude;
+        options.longitude = this.selectedLocation.longitude;
+      }
+      this.tweetList.data = await getTweetList(options).then(response => response.data.data);
+      this.tweetList.loading = false;
     },
     setupMap() {
       const {
@@ -68,6 +103,7 @@ export default {
       } = window;
 
       am4core.ready(() => {
+        const self = this;
         // Themes begin
         am4core.useTheme(am4themes_animated);
         // Themes end
@@ -93,10 +129,8 @@ export default {
 
         // Configure series
         var polygonTemplate = polygonSeries.mapPolygons.template;
-        polygonTemplate.tooltipText =
-          "{RW}, Kel. {KEL_NAME}, Kec. {KEC_NAME}, {KAB_NAME}";
+        polygonTemplate.tooltipText = "Kel. {KEL_NAME}, Kec. {Kecamatan}";
         polygonTemplate.polygon.fillOpacity = 0.6;
-
         // Create hover state and set alternative fill color
         var hs = polygonTemplate.states.create("hover");
         hs.properties.fill = chart.colors.getIndex(0);
@@ -105,22 +139,42 @@ export default {
         var imageSeries = chart.series.push(new am4maps.MapImageSeries());
         imageSeries.mapImages.template.propertyFields.longitude = "longitude";
         imageSeries.mapImages.template.propertyFields.latitude = "latitude";
-        imageSeries.mapImages.template.tooltipText = "{title}";
         imageSeries.mapImages.template.propertyFields.url = "url";
+        imageSeries.mapImages.template.tooltip = new am4core.Tooltip();
+        imageSeries.mapImages.template.tooltip.getFillFromObject = false;
+        imageSeries.mapImages.template.tooltip.label.fontSize = 20;
+        imageSeries.mapImages.template.tooltip.color = am4core.color("#000");
+        imageSeries.mapImages.template.tooltip.label.propertyFields.fill =
+          "color";
+        imageSeries.mapImages.template.tooltip.background.propertyFields.stroke =
+          "color";
+        imageSeries.mapImages.template.tooltipText =
+          "{title}\n [font-size:15px]Tweet: {tweetNum}\nConfidence: {confidence}";
+        // imageSeries.mapImages.template.tooltip.borderRadius = 1;
 
         var circle = imageSeries.mapImages.template.createChild(am4core.Circle);
         circle.radius = 3;
         circle.propertyFields.fill = "color";
+        circle.zIndex = 4;
+        // circle.events.on("hit", handleDotClicked);
 
         var circle2 = imageSeries.mapImages.template.createChild(
           am4core.Circle
         );
         circle2.radius = 3;
+        circle2.zIndex = 2;
         circle2.propertyFields.fill = "color";
+        // circle2.dataItem = imageSeries;
+        circle2.events.on("hit", handleDotClicked);
 
         circle2.events.on("inited", function(event) {
           animateBullet(event.target);
         });
+
+        function handleDotClicked(event){
+          console.log("handleDotClicked -> event", event)
+          self.selectPoint(event.target.dataItem._point);
+        };
 
         function animateBullet(circle) {
           var animation = circle.animate(
@@ -143,6 +197,9 @@ export default {
           color: colorSet.next()
         }));
       }); // end am4core.ready()
+    },
+    selectPoint(point) {
+      this.selectedPoint = point;
     }
   }
 };
