@@ -34,6 +34,7 @@
         :username="tweet.username"
         :profileImg="tweet.img"
         :content="tweet.content"
+        :date="tweet.dateTweetCreated"
         :location="tweet.locationInfo.parsed_place_name"
         :tweet-url="tweet.tweet_url"
       />

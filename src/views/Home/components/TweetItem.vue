@@ -18,6 +18,9 @@
       <div class="text">
         {{ content }}
       </div>
+      <div class="date">
+        {{ dateFormated.precise }}
+      </div>
       <div class="location">
         <img src="@/assets/img/location_on-24px.svg" alt="" class="icon" />{{
           location
@@ -28,6 +31,8 @@
 </template>
 
 <script>
+import spacetime from 'spacetime';
+
 export default {
   name: "TweetItem",
   props: [
@@ -38,8 +43,16 @@ export default {
     "content",
     "profileImg",
     "location",
-    "tweetUrl"
+    "tweetUrl",
+    "date"
   ],
+  computed: {
+    dateFormated() {
+      const now = spacetime.now();
+      // return spacetime(this.date).since(now)
+      return now.since(spacetime(this.date))
+    }
+  },
   methods: {
     toTweetSource() {
       var win = window.open(this.tweetUrl, "_blank");
@@ -79,6 +92,11 @@ export default {
     .text {
       font-size: 1rem;
       margin-bottom: 1rem;
+    }
+    .date {
+      border-top: 1px solid rgba(black, .15);
+      padding: .5rem 0;
+      font-size: .9rem;
     }
   }
 
